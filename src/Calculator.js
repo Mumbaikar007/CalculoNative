@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import Style from './Style';
-import InputButton from './InputButton';
+import InputButton from './InputButtons';
 
 // Define the input buttons that will be displayed in the calculator.
 const inputButtons = [
@@ -27,7 +27,10 @@ export default class ReactCalculator extends Component {
         this.initialState = {
             previousInputValue: 0,
             inputValue: 0,
-            selectedSymbol: null
+            selectedSymbol: null,
+            inputValueString: '0',
+            isLastSymbolString: 0,
+            previousString: ''
         };
 
         this.state = this.initialState;
@@ -37,7 +40,7 @@ export default class ReactCalculator extends Component {
         return (
             <View style={Style.rootContainer}>
                 <View style={Style.displayContainer}>
-                    <Text style={Style.displayText}></Text>
+                    <Text style={Style.displayText}>{this.state.inputValue}</Text>
                 </View>
                 <View style={Style.inputContainer}>
                     {this._renderInputButtons()}
@@ -45,6 +48,7 @@ export default class ReactCalculator extends Component {
             </View>
         );
     }
+
 
     _renderInputButtons() {
 
@@ -74,9 +78,12 @@ export default class ReactCalculator extends Component {
 
     _handleNumberInput(num) {
         let inputValue = (this.state.inputValue * 10) + num;
-
+        console.log(inputValue);
+        //var string = this.state.lastIsSymbolString,regex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/;
+        //console.log(!!string.match(regex));
         this.setState({
-            inputValue: inputValue
+            inputValueString : inputValue,
+            inputValue: inputValue,
         });
     }
 
@@ -89,7 +96,9 @@ export default class ReactCalculator extends Component {
                 this.setState({
                     selectedSymbol: str,
                     previousInputValue: this.state.inputValue,
+                    //inputValueString: this.state.inputValue + ' ' + str,
                     inputValue: 0
+
                 });
                 break;
 
@@ -105,6 +114,7 @@ export default class ReactCalculator extends Component {
                 this.setState({
                     previousInputValue: 0,
                     inputValue: eval(previousInputValue + symbol + inputValue),
+                    //inputValueString: eval(previousInputValue + symbol + inputValue),
                     selectedSymbol: null
                 });
                 break;
@@ -114,7 +124,7 @@ export default class ReactCalculator extends Component {
                 break;
 
             case 'c':
-                this.setState({inputValue: 0});
+                this.setState({inputValue: 0, inputValueString : '0'});
                 break;
 
         }
